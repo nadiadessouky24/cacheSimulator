@@ -13,8 +13,10 @@ map<int,int>memory;
 vector<int> sequence;
 
 //for bonus feature later 
-vector<int> writing_index_storage;
-vector<int> writing_data;  
+bool writePolicy; 
+bool writeAllocate; 
+vector<int> writingIndexStorage;
+vector<int> writingData;  
 
 struct CacheLine
 {
@@ -132,13 +134,13 @@ void Cache::accessSequence(vector<int> &sequence)
 
         for (auto entry : cacheEntries)
         {
-            cout << "Cache Entry " << dec << entry.index + 1 << ": Valid bit- " << entry.valid << ", Tag bits- " << entry.tag << endl;
+            cout << "Cache Entry " << dec << entry.index + 1 << ": Validity: " << entry.valid << ", Tag bits- " << entry.tag << endl;
         }
 
-        double missRatio = (double)misses / accesses;
-        double hitRatio = (double)hits / accesses;
         cout << "Total Number of Accesses: " << accesses << endl;
+        double hitRatio = (double)hits / accesses;
         cout << "Hit Ratio: " << hitRatio << endl;
+        double missRatio = (double)misses / accesses;
         cout << "Miss Ratio: " << missRatio << endl;
         double AMAT = ((double)accessCycles + (missRatio * 120));
         cout << "AMAT: " << AMAT << " cycles" << endl
@@ -287,6 +289,14 @@ cin >> accessCycles;
  
     Cache myCache(totalCacheSize, cacheLineSize, accessCycles);
     myCache.accessSequence(data_accessSequence);
+
+
+    cout << "Choose writing policy: " << endl;
+    cout << "For write through press 1, for write back press 0: ";
+    cin >> writePolicy;
+    cout << "Choose writing miss policy: " << endl;
+    cout << "For write allocate choose 1, for no write allocation choose 0: ";
+    cin >> writeAllocate; 
     // cout<<"Instruction Access Sequence Cache Simulation: "<<endl;
     // simulateCache(instruction_accessSequence, totalCacheSize, cacheLineSize, accessCycles);
 
